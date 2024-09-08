@@ -1,0 +1,33 @@
+org: kentaka
+service: phi3
+
+provider:
+  name: aws
+  runtime: python3.10
+  region: ap-southeast-1
+  layers:
+    - arn:aws:lambda:ap-southeast-1:446749702770:layer:numpy-layer:5
+    - arn:aws:lambda:ap-southeast-1:446749702770:layer:openvino-layer:3
+    - arn:aws:lambda:ap-southeast-1:446749702770:layer:model-layer:3
+
+functions:
+  lambda_handler:
+    timeout: 30
+    memorySize: 1024
+    handler: handler.lambda_handler
+    layers:
+      - arn:aws:lambda:ap-southeast-1:446749702770:layer:numpy-layer:5
+      - arn:aws:lambda:ap-southeast-1:446749702770:layer:openvino-layer:3
+      - arn:aws:lambda:ap-southeast-1:446749702770:layer:model-layer:3
+    package:
+      exclude:  
+        - ./test/**
+        - ./**
+        - ./lambda_layer/**
+      include:
+      - ./handler.py
+    events:
+      - http:
+          path: inference
+          method: post
+          cors: true

@@ -1,0 +1,7 @@
+aws lambda publish-layer-version \
+  --layer-name model-layer \
+  --zip-file fileb://./lambda_layer/model_layer.zip \
+  --compatible-runtimes python3.10
+
+aws lambda list-layer-versions --layer-name numpy-layer
+aws lambda delete-layer-version --layer-name numpy-layer --version-number 1
